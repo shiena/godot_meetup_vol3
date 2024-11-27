@@ -1,0 +1,168 @@
+[gd_resource type="VisualShader" load_steps=11 format=3 uid="uid://be2aodlyx0jfm"]
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_4cw1p"]
+parameter_name = "angle"
+hint = 1
+max = 360.0
+default_value_enabled = true
+default_value = 60.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_jmle8"]
+parameter_name = "direction"
+hint = 1
+max = 360.0
+default_value_enabled = true
+default_value = 45.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_rdalb"]
+parameter_name = "radius"
+hint = 1
+default_value_enabled = true
+default_value = 0.4
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_b7nhc"]
+output_port_for_preview = 0
+size = Vector2(1104, 940)
+expression = "pos = (uv * 2.0 -1.0) + position;"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_aowts"]
+output_port_for_preview = 0
+size = Vector2(1104, 980)
+expression = "vec2 uv2 = -uv.yx;
+float theta = degrees(atan(uv2.y, uv2.x)) + angle/2.0;
+float adjustTheta = mod(theta + direction + 360.0, 360.0);
+sector = adjustTheta <= angle;"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_vny1n"]
+output_port_for_preview = 0
+size = Vector2(1104, 800)
+expression = "circle = length(pos) <= radius;"
+
+[sub_resource type="VisualShaderNodeIntOp" id="VisualShaderNodeIntOp_yist6"]
+output_port_for_preview = 0
+operator = 7
+
+[sub_resource type="VisualShaderNodeVec2Parameter" id="VisualShaderNodeVec2Parameter_htfwg"]
+parameter_name = "position"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_rxphv"]
+parameter_name = "color"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_eeixj"]
+output_port_for_preview = 0
+input_name = "uv"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform vec4 color : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+uniform float radius : hint_range(0, 1) = 0.40000000596046;
+uniform vec2 position = vec2(0.000000, 0.000000);
+uniform float direction : hint_range(0, 360) = 45;
+uniform float angle : hint_range(0, 360) = 60;
+
+
+
+void fragment() {
+// ColorParameter:3
+	vec4 n_out3p0 = color;
+
+
+// FloatParameter:2
+	float n_out2p0 = radius;
+
+
+// Input:4
+	vec2 n_out4p0 = UV;
+
+
+// Vector2Parameter:27
+	vec2 n_out27p0 = position;
+
+
+	vec2 n_out22p0;
+// Expression:22
+	n_out22p0 = vec2(0.0, 0.0);
+	{
+		n_out22p0 = (n_out4p0 * 2.0 -1.0) + n_out27p0;
+	}
+
+
+	bool n_out24p0;
+// Expression:24
+	n_out24p0 = false;
+	{
+		n_out24p0 = length(n_out22p0) <= n_out2p0;
+	}
+
+
+// FloatParameter:14
+	float n_out14p0 = direction;
+
+
+// FloatParameter:13
+	float n_out13p0 = angle;
+
+
+	bool n_out23p0;
+// Expression:23
+	n_out23p0 = false;
+	{
+		vec2 uv2 = -n_out22p0.yx;
+		float theta = degrees(atan(uv2.y, uv2.x)) + n_out13p0/2.0;
+		float adjustTheta = mod(theta + n_out14p0 + 360.0, 360.0);
+		n_out23p0 = adjustTheta <= n_out13p0;
+	}
+
+
+// IntOp:26
+	int n_out26p0 = (n_out24p0 ? 1 : 0) & (n_out23p0 ? 1 : 0);
+
+
+// Output:0
+	ALBEDO = vec3(n_out3p0.xyz);
+	ALPHA = float(n_out26p0);
+
+
+}
+"
+nodes/fragment/0/position = Vector2(3860, 500)
+nodes/fragment/2/node = SubResource("VisualShaderNodeFloatParameter_rdalb")
+nodes/fragment/2/position = Vector2(1060, -800)
+nodes/fragment/3/node = SubResource("VisualShaderNodeColorParameter_rxphv")
+nodes/fragment/3/position = Vector2(3140, 80)
+nodes/fragment/4/node = SubResource("VisualShaderNodeInput_eeixj")
+nodes/fragment/4/position = Vector2(240, -80)
+nodes/fragment/13/node = SubResource("VisualShaderNodeFloatParameter_4cw1p")
+nodes/fragment/13/position = Vector2(2440, 2420)
+nodes/fragment/14/node = SubResource("VisualShaderNodeFloatParameter_jmle8")
+nodes/fragment/14/position = Vector2(1660, 740)
+nodes/fragment/22/node = SubResource("VisualShaderNodeExpression_b7nhc")
+nodes/fragment/22/position = Vector2(260, 500)
+nodes/fragment/22/size = Vector2(1104, 940)
+nodes/fragment/22/input_ports = "0,3,uv;1,3,position;"
+nodes/fragment/22/output_ports = "0,3,pos;"
+nodes/fragment/22/expression = "pos = (uv * 2.0 -1.0) + position;"
+nodes/fragment/23/node = SubResource("VisualShaderNodeExpression_aowts")
+nodes/fragment/23/position = Vector2(1760, 1380)
+nodes/fragment/23/size = Vector2(1104, 980)
+nodes/fragment/23/input_ports = "0,3,uv;1,0,direction;2,0,angle;"
+nodes/fragment/23/output_ports = "0,6,sector;"
+nodes/fragment/23/expression = "vec2 uv2 = -uv.yx;
+float theta = degrees(atan(uv2.y, uv2.x)) + angle/2.0;
+float adjustTheta = mod(theta + direction + 360.0, 360.0);
+sector = adjustTheta <= angle;"
+nodes/fragment/24/node = SubResource("VisualShaderNodeExpression_vny1n")
+nodes/fragment/24/position = Vector2(1740, -400)
+nodes/fragment/24/size = Vector2(1104, 800)
+nodes/fragment/24/input_ports = "0,0,radius;1,3,pos;"
+nodes/fragment/24/output_ports = "0,6,circle;"
+nodes/fragment/24/expression = "circle = length(pos) <= radius;"
+nodes/fragment/26/node = SubResource("VisualShaderNodeIntOp_yist6")
+nodes/fragment/26/position = Vector2(3160, 520)
+nodes/fragment/27/node = SubResource("VisualShaderNodeVec2Parameter_htfwg")
+nodes/fragment/27/position = Vector2(860, -80)
+nodes/fragment/connections = PackedInt32Array(3, 0, 0, 0, 4, 0, 22, 0, 22, 0, 23, 0, 14, 0, 23, 1, 13, 0, 23, 2, 2, 0, 24, 0, 22, 0, 24, 1, 23, 0, 26, 1, 24, 0, 26, 0, 26, 0, 0, 1, 27, 0, 22, 1)

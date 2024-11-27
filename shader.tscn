@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://ccaumlcdg0shw"]
+
+[ext_resource type="Material" uid="uid://cwfg0pkvvp5f" path="res://circular_sector1.material" id="1_bdy8d"]
+[ext_resource type="Material" uid="uid://l564h643abwi" path="res://circular_sector2.material" id="2_lqlv6"]
+[ext_resource type="Material" uid="uid://bfii6fcni6334" path="res://flag1.material" id="3_8beh8"]
+[ext_resource type="Material" uid="uid://dx1lg8ky06t0e" path="res://flag2.material" id="3_i8pw5"]
+[ext_resource type="Material" uid="uid://hn7ks36xsutp" path="res://flag3.material" id="4_fsjmm"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nehdl"]
+subdivide_width = 10
+subdivide_depth = 10
+
+[node name="Node3D" type="Node3D"]
+
+[node name="CircularSector1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_nehdl")
+surface_material_override/0 = ExtResource("1_bdy8d")
+
+[node name="CircularSector2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+mesh = SubResource("PlaneMesh_nehdl")
+surface_material_override/0 = ExtResource("2_lqlv6")
+
+[node name="Flag1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_nehdl")
+surface_material_override/0 = ExtResource("3_8beh8")
+
+[node name="Flag2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_nehdl")
+surface_material_override/0 = ExtResource("3_i8pw5")
+
+[node name="Flag3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+mesh = SubResource("PlaneMesh_nehdl")
+surface_material_override/0 = ExtResource("4_fsjmm")

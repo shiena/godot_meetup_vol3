@@ -1,0 +1,99 @@
+[gd_resource type="VisualShader" load_steps=7 format=3 uid="uid://dqoujxx6bf5j0"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_tuhfs"]
+parameter_name = "color"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_03e2p"]
+output_port_for_preview = 0
+size = Vector2(1160, 1000)
+expression = "float y = sin((v.x * power + TIME) * speed) * amp;
+output = v + vec3(0, y, 0);"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_uc3di"]
+parameter_name = "amp"
+default_value_enabled = true
+default_value = 0.155
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_yhp3w"]
+parameter_name = "power"
+default_value_enabled = true
+default_value = 0.897
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_q51oe"]
+parameter_name = "speed"
+default_value_enabled = true
+default_value = 3.958
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_p03vi"]
+input_name = "vertex"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx;
+
+uniform float power = 0.89700001478195;
+uniform float speed = 3.95799994468689;
+uniform float amp = 0.15500000119209;
+uniform vec4 color : source_color = vec4(1.000000, 1.000000, 1.000000, 1.000000);
+
+
+
+void vertex() {
+// Input:5
+	vec3 n_out5p0 = VERTEX;
+
+
+// FloatParameter:3
+	float n_out3p0 = power;
+
+
+// FloatParameter:4
+	float n_out4p0 = speed;
+
+
+// FloatParameter:2
+	float n_out2p0 = amp;
+
+
+	vec3 n_out17p0;
+// Expression:17
+	n_out17p0 = vec3(0.0, 0.0, 0.0);
+	{
+		float y = sin((n_out5p0.x * n_out3p0 + TIME) * n_out4p0) * n_out2p0;
+		n_out17p0 = n_out5p0 + vec3(0, y, 0);
+	}
+
+
+// ColorParameter:13
+	vec4 n_out13p0 = color;
+
+
+// Output:0
+	VERTEX = n_out17p0;
+	COLOR.rgb = vec3(n_out13p0.xyz);
+
+
+}
+"
+graph_offset = Vector2(163.064, -433.456)
+modes/cull = 2
+nodes/vertex/0/position = Vector2(3240, -580)
+nodes/vertex/2/node = SubResource("VisualShaderNodeFloatParameter_uc3di")
+nodes/vertex/2/position = Vector2(600, 180)
+nodes/vertex/3/node = SubResource("VisualShaderNodeFloatParameter_yhp3w")
+nodes/vertex/3/position = Vector2(620, -780)
+nodes/vertex/4/node = SubResource("VisualShaderNodeFloatParameter_q51oe")
+nodes/vertex/4/position = Vector2(580, -320)
+nodes/vertex/5/node = SubResource("VisualShaderNodeInput_p03vi")
+nodes/vertex/5/position = Vector2(1320, -820)
+nodes/vertex/13/node = SubResource("VisualShaderNodeColorParameter_tuhfs")
+nodes/vertex/13/position = Vector2(3000, 360)
+nodes/vertex/17/node = SubResource("VisualShaderNodeExpression_03e2p")
+nodes/vertex/17/position = Vector2(1320, -620)
+nodes/vertex/17/size = Vector2(1160, 1000)
+nodes/vertex/17/input_ports = "0,4,v;1,0,power;2,0,speed;3,0,amp;"
+nodes/vertex/17/output_ports = "0,4,output;"
+nodes/vertex/17/expression = "float y = sin((v.x * power + TIME) * speed) * amp;
+output = v + vec3(0, y, 0);"
+nodes/vertex/connections = PackedInt32Array(13, 0, 0, 6, 5, 0, 17, 0, 3, 0, 17, 1, 17, 0, 0, 0, 4, 0, 17, 2, 2, 0, 17, 3)
